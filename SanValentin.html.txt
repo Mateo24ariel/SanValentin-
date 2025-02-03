@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e6;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .container {
+            display: none;
+            transition: all 0.5s ease-in-out;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .yes {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        .yes:hover {
+            background-color: #e60000;
+            transform: scale(1.1);
+        }
+        .no {
+            background-color: #cccccc;
+            color: black;
+        }
+        .no:hover {
+            background-color: #999999;
+            transform: scale(1.1);
+        }
+        img {
+            width: 250px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animación de rebote para el oso */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Corazones flotantes */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4d4d;
+            transform: rotate(45deg);
+            animation: float 5s infinite ease-in-out;
+            opacity: 0.8;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4d4d;
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            left: -10px;
+            top: 0;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0) rotate(45deg); opacity: 1; }
+            to { transform: translateY(-800px) rotate(45deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla 1 -->
+    <div id="screen1" class="container active">
+        <img src="https://media.giphy.com/media/fqF0pHfJuB2zS/giphy.gif" alt="Oso cariñoso">
+        <h1>¿Quieres ser mi San Valentín? ❤️</h1>
+        <button class="yes" onclick="nextScreen('doubtScreen')">Sí</button>
+        <button class="no" onclick="previousScreen(null)">No</button>
+    </div>
+
+    <!-- Pantalla de Duda -->
+    <div id="doubtScreen" class="container">
+        <img src="https://media.giphy.com/media/1X7lE1h5iikjI/giphy.gif" alt="Oso pensativo">
+        <h1>¿Estás segura de tu respuesta? 💭</h1>
+        <button class="yes" onclick="nextScreen('confirmationScreen')">Sí</button>
+        <button class="no" onclick="previousScreen('screen1')">No</button>
+    </div>
+
+    <!-- Pantalla 2 -->
+    <div id="screen2" class="container">
+        <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Oso enamorado">
+        <h1>¿Segura? 😏</h1>
+        <button class="yes" onclick="nextScreen('confirmationScreen')">Sí</button>
+        <button class="no" onclick="previousScreen('doubtScreen')">No</button>
+    </div>
+
+    <!-- Pantalla 3 -->
+    <div id="screen3" class="container">
+        <img src="https://media.giphy.com/media/4Zo41lhzKt6iZ8xff9/giphy.gif" alt="Oso insistente">
+        <h1>¿Segurísima? 😳</h1>
+        <button class="yes" onclick="nextScreen('confirmationScreen')">Sí</button>
+        <button class="no" onclick="previousScreen('screen2')">No</button>
+    </div>
+
+    <!-- Confirmación Final -->
+    <div id="confirmationScreen" class="container">
+        <img src="https://media.giphy.com/media/l4FGGafcOHmrlQxG0/giphy.gif" alt="Oso esperando">
+        <h1>¿Última oportunidad, segura de verdad? 😅</h1>
+        <button class="yes" onclick="showFinal()">Sí</button>
+        <button class="no" onclick="previousScreen('screen3')">No</button>
+    </div>
+
+    <!-- Pantalla Final -->
+    <div id="finalScreen" class="container">
+        <h1>¡Sabía que dirías que sí! ❤️🎉</h1>
+        <img src="https://media.giphy.com/media/l41YdLeL5K2x8aNba/giphy.gif" alt="Oso feliz">
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Función para pasar a la siguiente pantalla
+        function nextScreen(nextId) {
+            document.querySelector('.active').classList.remove('active');
+            document.getElementById(nextId).classList.add('active');
+        }
+
+        // Función para volver a la pantalla anterior
+        function previousScreen(prevId) {
+            document.querySelector('.active').classList.remove('active');
+            if (prevId) {
+                document.getElementById(prevId).classList.add('active');
+            } else {
+                document.getElementById('screen1').classList.add('active'); // Vuelve al inicio si no hay pantalla previa
+            }
+        }
+
+        // Pantalla final con corazones flotantes
+        function showFinal() {
+            document.querySelector('.active').classList.remove('active');
+            document.getElementById('finalScreen').classList.add('active');
+            createHearts();
+        }
+
+        // Crear corazones flotantes
+        function createHearts() {
+            for (let i = 0; i < 30; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+    </script>
+</body>
+</html>
